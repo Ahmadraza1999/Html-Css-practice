@@ -1,0 +1,37 @@
+name: HTML CSS JS CI
+
+# Trigger workflow
+on:
+  push:
+    branches: [ main, feature ]  # Push ke time run hoga
+  pull_request:
+    branches: [ main ]           # PR ke time run hoga
+  workflow_dispatch:             # Manual run ke liye
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Validate HTML
+      - name: Validate HTML
+        uses: w3c/html-validator-action@v1
+        with:
+          files: "**/*.html"
+
+      # Step 3: Validate CSS
+      - name: Lint CSS
+        uses: zwaldowski/css-validator-action@v1
+        with:
+          files: "**/*.css"
+
+      # Step 4: Validate JS
+      - name: Lint JS
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_JS: true
+          DEFAULT_BRANCH: main
